@@ -1,0 +1,127 @@
+public T remove() {
+        T result = null;
+        if(numberOfEntries==0)
+        	return result;
+
+        // MODIFY THIS METHOD TO REMOVE A RANDOM ITEM FROM THE BAG
+        Random rn=new Random();
+        int x=rn.nextInt(numberOfEntries);
+        
+        x=x%numberOfEntries;
+        
+        if(x!=0)
+        {
+        	Node curr=firstNode,prev=null;
+        	for(int i=0;i<x;i++)
+        	{
+        		
+        		prev=curr;
+        		curr=curr.next;
+        	}
+        	prev.next=curr.next;
+        	curr.next=firstNode;
+        	firstNode=curr;
+        }
+        
+
+        if (firstNode != null) {
+            result = firstNode.data;
+            firstNode = firstNode.next; // Remove first node from chain
+            numberOfEntries--;
+            if(numberOfEntries==0)
+            	firstNode=null;
+        } // end if
+
+
+        return result;
+    } // end remove
+
+    /** Override the toString method so that we can inspect the contents of the bag.
+     * @return A string representation of the contents of the bag. */
+    public String toString() {
+
+        String result = "Bag{Size:" + numberOfEntries + " ";
+
+        Node scout = firstNode;
+
+        for (int index = 0; index < numberOfEntries; index++) {
+            result += "[" + scout.data + "] ";
+            scout = scout.next;
+        } // end for
+
+        result += "}";
+        return result;
+    } // end toString
+
+    /*********************************************************************
+     * 
+     * METHODS TO BE COMPLETED
+     * 
+     * 
+     ************************************************************************/
+    
+    /** Check to see if two bags are equals.  
+     * @param aBag Another object to check this bag against.
+     * @return True if the two bags contain the same objects with the same frequencies.
+     */
+    public boolean equals(LinkedBag<T> aBag) {
+    	
+        boolean result = false; // result of comparison of bags
+        if(this.numberOfEntries != aBag.numberOfEntries)
+        	return result;
+        
+        Node scout=this.firstNode;
+        for(int i=0;i< numberOfEntries;i++)
+        {
+        	int f1=this.getFrequencyOf(scout.data);
+        	int f2=aBag.getFrequencyOf(scout.data);
+        	if(f1!=f2)
+        		return result;
+        	scout=scout.next;
+        }
+        result=true;
+        
+        return result;
+    }  // end equals
+
+    /** Duplicate all the items in a bag.
+     * @return True if the duplication is possible.
+     */
+    public boolean duplicateAll() {
+        boolean success = true; // should always return true
+                                // if there is a problem allocating nodes
+                                // an exception will be thrown
+
+        // COMPLETE THIS METHOD 
+        
+        int n=this.numberOfEntries;
+        Node ptr=this.firstNode;
+        for(int i=0;i<n;i++)
+        {
+        	this.add(ptr.data);
+        	ptr=ptr.next;
+        }
+
+        return success;
+    }  // end duplicateAll
+
+    /** Remove all duplicate items from a bag
+     */
+    public void removeDuplicates() {
+    	if(this.firstNode==null)
+    		return;
+
+        Node x=this.firstNode;
+        LinkedBag<T>newBag=new LinkedBag<T>();
+        while(x!=null)
+        {
+        	if(newBag.getFrequencyOf(x.data)<1)
+        	{
+        		newBag.add(x.data);
+        	}
+        	x=x.next;
+        }
+        this.firstNode=newBag.firstNode;
+        this.numberOfEntries=newBag.numberOfEntries;
+        return;
+    }  // end removeDuplicates
